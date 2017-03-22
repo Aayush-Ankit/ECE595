@@ -23,13 +23,13 @@ max_iter: 10000\n\
 snapshot: 5000\n\
 snapshot_prefix: \"examples/mnist/lenet\"\n\
 # solver mode: CPU or GPU\n\
-solver_mode: GPU"
+solver_mode: CPU"
 
 for i in xrange(num_trials):
     filename = 'lenet_solver' + str(i) + '.prototxt'
     fid = open(filename, 'w')
     fid.write("# The train/test net protocol buffer definition\n")
-    network_filename = "net: \"examples/mnist/lenet_train_test" + str(i) + ".prototxt\"\n"
+    network_filename = "net: \"ECE595/mnist/train_test/lenet_train_test" + str(i) + ".prototxt\"\n"
     fid.write(network_filename)
     fid.write(common_text)
     fid.close()
@@ -50,7 +50,7 @@ layer {\n\
   data_param {\n\
     source: \"examples/mnist/mnist_train_lmdb\"\n\
     batch_size: 64\n\
-l    backend: LMDB\n\
+    backend: LMDB\n\
   }\n\
 }\n\
 layer {\n\
