@@ -1,38 +1,5 @@
 num_trials = 10
-
-# writing the solver prototxt
-common_text = "# test_iter specifies how many forward passes the test should carry out.\n\
-# In the case of MNIST, we have test batch size 100 and 100 test iterations,\n\
-# covering the full 10,000 testing images.\n\
-test_iter: 100\n\
-# Carry out testing every 500 training iterations.\n\
-test_interval: 500\n\
-# The base learning rate, momentum and the weight decay of the network.\n\
-base_lr: 0.01\n\
-momentum: 0.9\n\
-weight_decay: 0.0005\n\
-# The learning rate policy\n\
-lr_policy: \"inv\"\n\
-gamma: 0.0001\n\
-power: 0.75\n\
-# Display every 100 iterations\n\
-display: 100\n\
-# The maximum number of iterations\n\
-max_iter: 10000\n\
-# snapshot intermediate results\n\
-snapshot: 5000\n\
-snapshot_prefix: \"examples/mnist/lenet\"\n\
-# solver mode: CPU or GPU\n\
-solver_mode: CPU"
-
-for i in xrange(num_trials):
-    filename = 'lenet_solver' + str(i) + '.prototxt'
-    fid = open(filename, 'w')
-    fid.write("# The train/test net protocol buffer definition\n")
-    network_filename = "net: \"ECE595/mnist/train_test/lenet_train_test" + str(i) + ".prototxt\"\n"
-    fid.write(network_filename)
-    fid.write(common_text)
-    fid.close()
+path = './train_test/var_ker_size/'
 
 # writing the train_test prototxt
 common_text_start = "name: \"LeNet\"\n\
@@ -147,7 +114,7 @@ layer {\n\
  }\n"
     return common_text_end
 
-def generate_conv_text(layer_id):
+def generate_conv_text(layer_id, kernel_size):
     if (layer_id == 0):
         text1 = "layer {\n\
   name: \"conv" + str(layer_id) + "\"\n\
@@ -168,7 +135,7 @@ def generate_conv_text(layer_id):
   }\n\
   convolution_param {\n\
     num_output: 50\n\
-    kernel_size: 5\n\
+    kernel_size: " + str(kernel_size) + "\n\
     stride: 1\n\
     weight_filler {\n\
       type: \"xavier\"\n\
@@ -197,18 +164,33 @@ def generate_pool_text(layer_id):
 
 num_conv = xrange(10) #no. of convolution layers
 
-for i in xrange(num_trials):
-    filename = 'lenet_train_test' + str(i) + '.prototxt'
+#variable number of convolutional layers with kernel size 5
+##for i in xrange(num_trials):
+##    filename = 'lenet_train_test' + str(i) + '.prototxt'
+##    fid = open(filename, 'w')
+##    fid.write(common_text_start)
+##    for j in xrange(i):
+##        conv_text = generate_conv_text(j, 5)
+##        fid.write(conv_text)
+##        pool_text = generate_pool_text(j)
+##        fid.write(pool_text)
+##    common_text_end = generate_conv_end_text(i)
+##    fid.write(common_text_end)
+##    fid.close()
+    
+#variable kernel sizes for fixed 3 convolutional layers
+num_layers = 3
+kernel_size_list = [3, 5]
+for k_size in kernel_size_list:
+    filename = path + 'lenet_train_test_kersize' + str(k_size) + '.prototxt'
     fid = open(filename, 'w')
     fid.write(common_text_start)
-    for j in xrange(i):
-        conv_text = generate_conv_text(j)
+    for j in xrange(num_layers):
+        conv_text = generate_conv_text(j, k_size)
         fid.write(conv_text)
         pool_text = generate_pool_text(j)
         fid.write(pool_text)
-    common_text_end = generate_conv_end_text(i)
+    common_text_end = generate_conv_end_text(num_layers)
     fid.write(common_text_end)
     fid.close()
-    
-
     
