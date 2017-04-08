@@ -1,6 +1,9 @@
 num_trials = 10
-path = "ECE595/mnist/train_test/var_ker_size/"
-solver_path = "solver/var_ker_size/"
+#path = "ECE595/mnist/train_test/var_ker_size/"
+#solver_path = "solver/var_ker_size/"
+
+path = "ECE595/mnist/train_test/var_fc_size/"
+solver_path = "solver/var_fc_size/"
 
 # writing the solver prototxt
 common_text = "# test_iter specifies how many forward passes the test should carry out.\n\
@@ -25,17 +28,28 @@ max_iter: 10000\n\
 snapshot: 5000\n\
 snapshot_prefix: \"examples/mnist/lenet\"\n\
 # solver mode: CPU or GPU\n\
-solver_mode: CPU"
+solver_mode: GPU"
 
-num_layers = 3
-kernel_size_list = [3, 5]
+##num_layers = 3
+##kernel_size_list = [3, 5]
 
-#for i in xrange(num_trials):
-for k_size in kernel_size_list:
-    filename = solver_path + 'lenet_solver_kersize' + str(k_size) + '.prototxt'
-    fid = open(filename, 'w')
-    fid.write("# The train/test net protocol buffer definition\n")
-    network_filename = "net: \"" + path + 'lenet_train_test_kersize' + str(k_size) + ".prototxt\"\n"
-    fid.write(network_filename)
-    fid.write(common_text)
-    fid.close()
+##for k_size in kernel_size_list:
+##    filename = solver_path + 'lenet_solver_kersize' + str(k_size) + '.prototxt'
+##    fid = open(filename, 'w')
+##    fid.write("# The train/test net protocol buffer definition\n")
+##    network_filename = "net: \"" + path + 'lenet_train_test_kersize' + str(k_size) + ".prototxt\"\n"
+##    fid.write(network_filename)
+##    fid.write(common_text)
+##    fid.close()
+
+num_fc_layer = [1, 2, 3] #num FC layers
+num_fc_neurons = [100, 300, 500] #size of FC layer
+for num_fcl in num_fc_layer:
+    for num_fcn in num_fc_neurons:
+        filename = solver_path + 'lenet_solver_fcl' + str(num_fcl) + '_fcn' + str(num_fcn) + '.prototxt'
+        fid = open(filename, 'w')
+        fid.write("# The train/test net protocol buffer definition\n")
+        network_filename = "net: \"" + path + 'lenet_train_test_fcl' + str(num_fcl) + '_fcn' + str(num_fcn) + '.prototxt\"\n'
+        fid.write(network_filename)
+        fid.write(common_text)
+        fid.close()
