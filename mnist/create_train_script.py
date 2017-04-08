@@ -5,8 +5,8 @@ filename = 'train_lenet_trials_var_featuresize.sh'
 start_text = '#!/usr/bin/env sh \n\
 set -e\n'
 
-solver_path = 'ECE595/mnist/var_conv_features/solver/var_num_feature/'
-trace_path = 'ECE595/mnist/var_conv_features/traces/var_num_feature/'
+solver_path = 'ECE595/mnist/solver/var_num_feature/'
+trace_path = 'ECE595/mnist/traces/var_num_feature/'
 
 fid = open(filename, 'w')
 fid.write(start_text)
@@ -18,4 +18,4 @@ for f_size in feature_size_list:
 fid.close()
 
 
-    
+
