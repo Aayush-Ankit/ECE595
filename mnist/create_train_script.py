@@ -5,8 +5,10 @@ filename = 'train_lenet_trials_var_featuresize.sh'
 start_text = '#!/usr/bin/env sh \n\
 set -e\n'
 
-solver_path = 'ECE595/mnist/solver/var_num_feature/'
-trace_path = 'ECE595/mnist/traces/var_num_feature/'
+#solver_path = 'ECE595/mnist/solver/var_num_feature/'
+solver_path = 'ECE595/mnist/solver/var_num_feature_maxiter100/'
+#trace_path = 'ECE595/mnist/traces/var_num_feature/'
+trace_path = 'ECE595/mnist/traces/var_num_feature_maxiter100/'
 
 fid = open(filename, 'w')
 fid.write(start_text)

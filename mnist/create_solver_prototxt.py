@@ -3,7 +3,8 @@ num_trials = 10
 #solver_path = "solver/var_ker_size/"
 
 path = "ECE595/mnist/train_test/var_num_feature/"
-solver_path = "solver/var_num_feature/"
+#solver_path = "solver/var_num_feature/"
+solver_path = "solver/var_num_feature_maxiter100/"
 
 # writing the solver prototxt
 common_text = "# test_iter specifies how many forward passes the test should carry out.\n\
@@ -23,12 +24,12 @@ power: 0.75\n\
 # Display every 100 iterations\n\
 display: 100\n\
 # The maximum number of iterations\n\
-max_iter: 10000\n\
+max_iter: 100\n\
 # snapshot intermediate results\n\
 snapshot: 5000\n\
 snapshot_prefix: \"examples/mnist/lenet\"\n\
 # solver mode: CPU or GPU\n\
-solver_mode: GPU"
+solver_mode: CPU"
 
 ##num_layers = 3
 ##kernel_size_list = [3, 5]
