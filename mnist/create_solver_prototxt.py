@@ -6,6 +6,7 @@ path = "ECE595/mnist/train_test/var_num_feature/"
 #solver_path = "solver/var_num_feature/"
 solver_path = "solver/var_num_feature_maxiter100/"
 
+# 1000 iterations --> 1 epoch (64*1000=64000 MNIST images)
 # writing the solver prototxt
 common_text = "# test_iter specifies how many forward passes the test should carry out.\n\
 # In the case of MNIST, we have test batch size 100 and 100 test iterations,\n\
@@ -24,7 +25,7 @@ power: 0.75\n\
 # Display every 100 iterations\n\
 display: 100\n\
 # The maximum number of iterations\n\
-max_iter: 100\n\
+max_iter: 1000\n\
 # snapshot intermediate results\n\
 snapshot: 5000\n\
 snapshot_prefix: \"examples/mnist/lenet\"\n\
