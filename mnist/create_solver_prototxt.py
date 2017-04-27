@@ -4,7 +4,7 @@ import itertools #for generating permutations
 #path = "ECE595/mnist/train_test/var_ker_size/"
 #solver_path = "solver/var_ker_size/"
 
-path = './train_test/var_everything/'
+path = 'ECE595/mnist/train_test/var_everything/'
 #solver_path = "solver/var_num_feature/"
 solver_path = "solver/var_everything/"
 
