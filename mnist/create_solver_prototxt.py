@@ -50,7 +50,7 @@ for num_conv_layers in num_conv:
                 filename = solver_path + 'lenet_solver_' + str(index) + '.prototxt'
                 fid = open(filename, 'w')
                 fid.write("# The train/test net protocol buffer definition\n")
-                network_filename = "net: \"" + path + 'lenet_train_test_' + str(index) + ".prototxt\"\n"
+                network_filename = "net: \"" + path + 'lenet_train_test' + str(index) + ".prototxt\"\n"
                 index = index + 1
                 fid.write(network_filename)
                 fid.write(common_text)
