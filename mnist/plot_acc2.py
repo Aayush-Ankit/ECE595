@@ -45,5 +45,5 @@ plt.legend(loc = 'upper left')
 plt.ylabel("Computational cost")
 plt.title ("Computational cost versus Accuracy")
 #plt.show()
-savefig('compute_accuracy2.png')
+plt.savefig('compute_accuracy2.png')
              
