@@ -2,6 +2,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 d = np.load('net_acc2.npy')
+#d1 = np.load('net_acc.npy')
+#d = np.append(d,d1)
 
 x = []
 y = []
@@ -36,8 +38,8 @@ print("Maximum accuracy is %f for index %d" % (min_Acc, min_Acc_idx))
 print("Maximum cost is %f for index %d \n" % (min_cost, min_cost_idx))
 
 plt.scatter(x,y, color='red', label = 'total_comp_cost')
-plt.scatter(x,y2, color='green', label = 'fcl_cost')
-plt.scatter(x,y3, label = 'conv_cost')
+#plt.scatter(x,y2, color='green', label = 'fcl_cost')
+#plt.scatter(x,y3, label = 'conv_cost')
 plt.ylim([0,800000])
 plt.xlim([40,100])
 plt.xlabel("Accuracy (%)")
@@ -45,5 +47,5 @@ plt.legend(loc = 'upper left')
 plt.ylabel("Computational cost")
 plt.title ("Computational cost versus Accuracy")
 #plt.show()
-plt.savefig('compute_accuracy2.png')
-             
+plt.savefig('results/compute_accuracy2.png')
+
