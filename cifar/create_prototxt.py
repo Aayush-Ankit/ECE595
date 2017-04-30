@@ -1,4 +1,6 @@
-path = './train_test/var_num_feature_maxiter20000/'
+import itertools #for generating permutations
+
+path = './train_test/var_everything/'
 
 # Fucntions to generate layer specific text
 common_text_start = "name: \"CIFAR\"\n\
@@ -43,7 +45,7 @@ def generate_conv_text(layer_id, kernel_size, num_features):
   name: \"conv" + str(layer_id) + "\"\n\
   type: \"Convolution\"\n\
   bottom: \"data\"\n"
-    else:   
+    else:
         text1 = "layer {\n\
   name: \"conv" + str(layer_id) + "\"\n\
   type: \"Convolution\"\n\
@@ -98,7 +100,7 @@ def generate_pool_text(layer_id):
 def generate_relu_text(layer_id):
     text = "layer {\n\
   name: \"relu" + str(layer_id) + "\"\n\
-  type: \"relu\"\n\
+  type: \"ReLU\"\n\
   bottom: \"ip" + str(layer_id) + "\"\n\
   top: \"ip" + str(layer_id) + "\"\n\
 }\n"
@@ -112,7 +114,7 @@ def generate_fc_text(layer_id, num_output, num_conv):
             bottom = 'pool' + str(num_conv-1)
     else:
         bottom = 'ip' + str(layer_id-1)
-        
+
     text = "layer {\n\
   name: \"ip" + str(layer_id) + "\"\n\
   type: \"InnerProduct\"\n\
@@ -135,7 +137,7 @@ def generate_fc_text(layer_id, num_output, num_conv):
     }\n\
   }\n\
 }\n"
-    return text            
+    return text
 
 def generate_fc_end_text (num_fc_layers, num_conv_layers):
     if (num_fc_layers == 0):
@@ -160,40 +162,57 @@ layer {\n\
   top: \"loss\"\n\
  }\n"
     return end_text
-    
-#variable kernel sizes for fixed 2 convolutional layers
-num_conv_layers = 3
-num_classes = 10
-ker_size = 5
-num_fc_layer = 1
-num_fc_neurons = 500
 
-#variable number of convolutional features
-feature_size_list = [10, 25, 50, 100, 150]
-for f_size in feature_size_list:
-    filename = path + 'cifar_train_test_featuresize' + str(f_size) + '.prototxt'
-    fid = open(filename, 'w')
-    fid.write(common_text_start)
-    for j in xrange(num_conv_layers):
-        conv_text = generate_conv_text(j, ker_size, f_size)
-        fid.write(conv_text)
-        sigmoid_text = generate_sigmoid_text(j)
-        fid.write(sigmoid_text)
-        pool_text = generate_pool_text(j)
-        fid.write(pool_text)
-    for k in xrange(num_fc_layer):
-       if (k+1 == num_fc_layer):
-           fc_text = generate_fc_text(k+1, num_classes, num_conv_layers)
-           fid.write(fc_text)
-       else:
-           fc_text = generate_fc_text(k+1, num_fc_neurons, num_conv_layers)
-           fid.write(fc_text)
-           relu_text = generate_relu_text(k+1)
-           fid.write(relu_text)
-    common_text_end = generate_fc_end_text(num_fc_layer, num_conv_layers)
-    fid.write(common_text_end)
-    fid.close()
-            
-        
-    
-        
+# Code to generate prototxt files
+num_classes = 10
+
+ker_size_list = [3,5] #kernel sizes
+num_conv = xrange(4) #number of conv layers
+num_fc_layer = [1,2,3]
+num_fc_neurons = [10,20,40,80,160]
+feature_size_list = [8, 16, 32, 64, 128]
+
+index = 0
+for num_conv_layers in num_conv:
+    num_feature = [p for p in itertools.product(feature_size_list, repeat=num_conv_layers)] #generate all permutations with repetitions
+    ker_size = [r for r in itertools.product(ker_size_list, repeat=num_conv_layers)] #generate all permutations with repetitions
+    for feature_tuple in num_feature: #choose feature
+        for kernel_tuple in ker_size: #choose kernel
+            for num_fcl in num_fc_layer:
+                num_fcn = [q for q in itertools.product(num_fc_neurons, repeat=num_fcl)] #generate all permutations
+                for fcn_tuple in num_fcn: #chose fc neurons
+                    filename = path + 'cifar_train_test_' + str(index) + '.prototxt'
+                    index = index + 1
+                    fid = open(filename, 'w')
+
+                    #file start text
+                    fid.write(common_text_start)
+
+                    #conv layers text (excluding input layer)
+                    for j in xrange(num_conv_layers):
+                        conv_text = generate_conv_text(j, kernel_tuple[j], feature_tuple[j])
+                        fid.write(conv_text)
+                        sigmoid_text = generate_sigmoid_text(j)
+                        fid.write(sigmoid_text)
+                        pool_text = generate_pool_text(j)
+                        fid.write(pool_text)
+
+                    #fc layers text (excluding output layer)
+                    for k in xrange(num_fcl):
+                        fc_text = generate_fc_text(k+1, fcn_tuple[k], num_conv_layers)
+                        fid.write(fc_text)
+                        relu_text = generate_relu_text(k+1)
+                        fid.write(relu_text)
+
+                    # generate output layer text
+                    fc_text = generate_fc_text(num_fcl+1, num_classes, num_conv_layers)
+                    fid.write(fc_text)
+                    #end text
+                    common_text_end = generate_fc_end_text(num_fcl+1, num_conv_layers)
+                    fid.write(common_text_end)
+                    fid.close()
+
+print (index)
+
+
+

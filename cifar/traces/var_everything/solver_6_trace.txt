@@ -1,0 +1,169 @@
+I0430 15:49:03.843641 11525 caffe.cpp:218] Using GPUs 0
+I0430 15:49:03.860846 11525 caffe.cpp:223] GPU 0: GeForce GTX 950M
+I0430 15:49:04.091096 11525 solver.cpp:44] Initializing solver from parameters: 
+test_iter: 10
+test_interval: 1000
+base_lr: 0.001
+display: 100
+max_iter: 60000
+lr_policy: "step"
+gamma: 1
+momentum: 0.9
+stepsize: 5000
+snapshot: 10000
+snapshot_prefix: "examples/cifar10_full_sigmoid"
+solver_mode: GPU
+device_id: 0
+net: "ECE595/cifar/train_test/var_everything/cifar_train_test_6.prototxt"
+train_state {
+  level: 0
+  stage: ""
+}
+I0430 15:49:04.091230 11525 solver.cpp:87] Creating training net from net file: ECE595/cifar/train_test/var_everything/cifar_train_test_6.prototxt
+I0430 15:49:04.091409 11525 net.cpp:294] The NetState phase (0) differed from the phase (1) specified by a rule in layer cifar
+I0430 15:49:04.091423 11525 net.cpp:294] The NetState phase (0) differed from the phase (1) specified by a rule in layer accuracy
+I0430 15:49:04.091493 11525 net.cpp:51] Initializing net from parameters: 
+name: "CIFAR"
+state {
+  phase: TRAIN
+  level: 0
+  stage: ""
+}
+layer {
+  name: "cifar"
+  type: "Data"
+  top: "data"
+  top: "label"
+  include {
+    phase: TRAIN
+  }
+  transform_param {
+    mean_file: "examples/cifar10/mean.binaryproto"
+  }
+  data_param {
+    source: "examples/cifar10/cifar10_train_lmdb"
+    batch_size: 111
+    backend: LMDB
+  }
+}
+layer {
+  name: "ip1"
+  type: "InnerProduct"
+  bottom: "data"
+  top: "ip1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 10
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "relu1"
+  type: "reLU"
+  bottom: "ip1"
+  top: "ip1"
+}
+layer {
+  name: "ip2"
+  type: "InnerProduct"
+  bottom: "ip1"
+  top: "ip2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 20
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "relu2"
+  type: "reLU"
+  bottom: "ip2"
+  top: "ip2"
+}
+layer {
+  name: "ip3"
+  type: "InnerProduct"
+  bottom: "ip2"
+  top: "ip3"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 10
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "loss"
+  type: "SoftmaxWithLoss"
+  bottom: "ip3"
+  bottom: "label"
+  top: "loss"
+}
+I0430 15:49:04.091553 11525 layer_factory.hpp:77] Creating layer cifar
+I0430 15:49:04.091652 11525 db_lmdb.cpp:35] Opened lmdb examples/cifar10/cifar10_train_lmdb
+I0430 15:49:04.091683 11525 net.cpp:84] Creating Layer cifar
+I0430 15:49:04.091694 11525 net.cpp:380] cifar -> data
+I0430 15:49:04.091719 11525 net.cpp:380] cifar -> label
+I0430 15:49:04.091735 11525 data_transformer.cpp:25] Loading mean file from: examples/cifar10/mean.binaryproto
+I0430 15:49:04.092702 11525 data_layer.cpp:45] output data size: 111,3,32,32
+I0430 15:49:04.097090 11525 net.cpp:122] Setting up cifar
+I0430 15:49:04.097115 11525 net.cpp:129] Top shape: 111 3 32 32 (340992)
+I0430 15:49:04.097121 11525 net.cpp:129] Top shape: 111 (111)
+I0430 15:49:04.097126 11525 net.cpp:137] Memory required for data: 1364412
+I0430 15:49:04.097136 11525 layer_factory.hpp:77] Creating layer ip1
+I0430 15:49:04.097152 11525 net.cpp:84] Creating Layer ip1
+I0430 15:49:04.097160 11525 net.cpp:406] ip1 <- data
+I0430 15:49:04.097177 11525 net.cpp:380] ip1 -> ip1
+I0430 15:49:04.098304 11525 net.cpp:122] Setting up ip1
+I0430 15:49:04.098315 11525 net.cpp:129] Top shape: 111 10 (1110)
+I0430 15:49:04.098320 11525 net.cpp:137] Memory required for data: 1368852
+I0430 15:49:04.098345 11525 layer_factory.hpp:77] Creating layer relu1
+F0430 15:49:04.098392 11525 layer_factory.hpp:81] Check failed: registry.count(type) == 1 (0 vs. 1) Unknown layer type: reLU (known types: AbsVal, Accuracy, ArgMax, BNLL, BatchNorm, BatchReindex, Bias, Concat, ContrastiveLoss, Convolution, Crop, Data, Deconvolution, Dropout, DummyData, ELU, Eltwise, Embed, EuclideanLoss, Exp, Filter, Flatten, HDF5Data, HDF5Output, HingeLoss, Im2col, ImageData, InfogainLoss, InnerProduct, Input, LRN, LSTM, LSTMUnit, Log, MVN, MemoryData, MultinomialLogisticLoss, PReLU, Parameter, Pooling, Power, RNN, ReLU, Reduction, Reshape, SPP, Scale, Sigmoid, SigmoidCrossEntropyLoss, Silence, Slice, Softmax, SoftmaxWithLoss, Split, TanH, Threshold, Tile, WindowData)
+*** Check failure stack trace: ***
+    @     0x7feb903655cd  google::LogMessage::Fail()
+    @     0x7feb90367433  google::LogMessage::SendToLog()
+    @     0x7feb9036515b  google::LogMessage::Flush()
+    @     0x7feb90367e1e  google::LogMessageFatal::~LogMessageFatal()
+    @     0x7feb90aedd5c  caffe::Net<>::Init()
+    @     0x7feb90aef46e  caffe::Net<>::Net()
+    @     0x7feb90ab5275  caffe::Solver<>::InitTrainNet()
+    @     0x7feb90ab66b5  caffe::Solver<>::Init()
+    @     0x7feb90ab69df  caffe::Solver<>::Solver()
+    @     0x7feb90ac6cf1  caffe::Creator_SGDSolver<>()
+    @           0x40a9f8  train()
+    @           0x4072f0  main
+    @     0x7feb8f2d6830  __libc_start_main
+    @           0x407b19  _start
+    @              (nil)  (unknown)
