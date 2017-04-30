@@ -68,7 +68,10 @@ for num_conv_layers in num_conv:
                 # Compute FC layers computation cost
                 temp_dict['fcl_cost'] = 0
                 for j in xrange(num_fcl):
-                    out_size = fcn_tuple[j]
+		    if (j+1 == num_fcl):
+			out_size = num_classes 
+		    else:
+			out_size == fcn_tuple[j]
                     temp_mem = out_size * inp_size
                     temp_mac = temp_mem
                     inp_size = out_size
