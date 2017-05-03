@@ -52,8 +52,8 @@ def generate_conv_end_text(num_conv_layers):
   name: \"ip1\"\n\
   type: \"InnerProduct\"\n\
   bottom: \"pool" + str(num_conv_layers-1) + "\"\n"
-      
-        
+
+
     common_text_end = text1 + "  top: \"ip1\"\n\
   param {\n\
     lr_mult: 1\n\
@@ -123,7 +123,7 @@ def generate_conv_text(layer_id, kernel_size, num_features):
   name: \"conv" + str(layer_id) + "\"\n\
   type: \"Convolution\"\n\
   bottom: \"data\"\n"
-    else:   
+    else:
         text1 = "layer {\n\
   name: \"conv" + str(layer_id) + "\"\n\
   type: \"Convolution\"\n\
@@ -174,7 +174,7 @@ def generate_fc_text(layer_id, num_output, num_conv):
             bottom = 'pool' + str(num_conv-1)
     else:
         bottom = 'ip' + str(layer_id-1)
-        
+
     text = "layer {\n\
   name: \"ip" + str(layer_id) + "\"\n\
   type: \"InnerProduct\"\n\
@@ -196,7 +196,7 @@ def generate_fc_text(layer_id, num_output, num_conv):
     }\n\
   }\n\
 }\n"
-    return text            
+    return text
 
 
 def generate_relu_text(layer_id):
@@ -255,7 +255,7 @@ for num_conv_layers in num_conv:
                 index = index + 1
                 fid = open(filename, 'w')
                 fid.write(common_text_start)
-                
+
                 for j in xrange(num_conv_layers):
                     conv_text = generate_conv_text(j, ker_size, feature_tuple[j])
                     fid.write(conv_text)
@@ -274,5 +274,5 @@ for num_conv_layers in num_conv:
                 fid.write(end_text)
                 fid.close()
 
-print(index)          
+print(index)
 
